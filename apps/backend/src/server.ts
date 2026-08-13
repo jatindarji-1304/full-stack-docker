@@ -31,5 +31,5 @@ app.get("/health", async (_, res) => {
 });
 app.use("/tasks", taskroutes);
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.warn(`Server running on http://localhost:${PORT}`);
 });

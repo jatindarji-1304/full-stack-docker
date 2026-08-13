@@ -1,32 +1,77 @@
 import js from "@eslint/js";
-import eslintConfigPrettier from "eslint-config-prettier";
-import turboPlugin from "eslint-plugin-turbo";
+import globals from "globals";
 import tseslint from "typescript-eslint";
-import onlyWarn from "eslint-plugin-only-warn";
+import unusedImports from "eslint-plugin-unused-imports";
 
-/**
- * A shared ESLint configuration for the repository.
- *
- * @type {import("eslint").Linter.Config[]}
- * */
-export const config = [
+export const config = tseslint.config(
+  {
+    ignores: [
+      "node_modules/**",
+      "dist/**",
+      "build/**",
+      ".next/**",
+      "coverage/**",
+    ],
+  },
+
   js.configs.recommended,
-  eslintConfigPrettier,
+
   ...tseslint.configs.recommended,
+
   {
-    plugins: {
-      turbo: turboPlugin,
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
     },
+
+    plugins: {
+      "unused-imports": unusedImports,
+    },
+
     rules: {
-      "turbo/no-undeclared-env-vars": "warn",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+
+      "unused-imports/no-unused-imports": "error",
+
+      "unused-imports/no-unused-vars": [
+        "error",
+        {
+          vars: "all",
+          args: "after-used",
+          ignoreRestSiblings: true,
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-non-null-assertion": "warn",
+
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        {
+          prefer: "type-imports",
+          fixStyle: "inline-type-imports",
+        },
+      ],
+
+      "prefer-const": "error",
+      "no-console": ["error", { allow: ["warn", "error"] }],
+      "eqeqeq": ["error", "always", { null: "ignore" }],
+      "no-duplicate-imports": "error",
+      "curly": ["error", "all"],
+      "no-unneeded-ternary": "error",
+      "prefer-template": "error",
+      "object-shorthand": ["error", "always"],
+      "no-param-reassign": ["error", { props: true }],
     },
   },
-  {
-    plugins: {
-      onlyWarn,
-    },
-  },
-  {
-    ignores: ["dist/**"],
-  },
-];
+);
+
+export default config;
