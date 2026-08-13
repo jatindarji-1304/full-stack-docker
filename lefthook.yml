@@ -1,7 +1,7 @@
 pre-commit:
   commands:
     lint:
-      run: pnpm exec eslint {staged_files}
+      run: pnpm lint
 
 pre-push:
   commands:
