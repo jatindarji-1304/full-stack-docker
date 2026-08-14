@@ -20,8 +20,8 @@ jobs:
         with:
           version: 9.0
       - name: install dependencies
-        with: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - name: lint
-        with: pnpm lint
+        run: pnpm lint
       - name: build
-        with: pnpm build
+        run: pnpm build
