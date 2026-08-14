@@ -1,28 +1,10 @@
 services:
-  demo-database:
-    image: postgres:17-alpine
-    env_file:
-      - ./apps/backend/.env
-    ports:
-      - "5432:5432"
-    networks:
-      - custom-network
-    container_name: postgres_db
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-      start_period: 5s
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./apps/backend/src/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
 
   demo-backend:
-    build:
-      context: .
-      dockerfile: apps/backend/Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: apps/backend/Dockerfile
+    image: full-stack-nextjs-demo-backend:latest
     ports:
       - "3001:3001"
     restart: always
@@ -30,9 +12,6 @@ services:
       - custom-network
     env_file:
       - ./apps/backend/.env
-    depends_on:
-      demo-database:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "/nodejs/bin/node", "dist/health_check.js"]
       interval: 10s
@@ -41,9 +20,15 @@ services:
       start_period: 15s
 
   demo-frontend:
-    build:
-      context: .
-      dockerfile: apps/frontend/Dockerfile
+    image: full-stack-nextjs-demo-frontend:latest
+    # build:
+    #   context: .
+    #   dockerfile: apps/frontend/Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pr-1.rule=Host(`pr-1.localhost`)"
+      - "traefik.http.routers.pr-1.entrypoints=web"
+      - "traefik.http.services.pr-1.loadbalancer.server.port=3000"
     ports:
       - "3000:3000"
     networks:
@@ -57,5 +42,3 @@ services:
 networks:
   custom-network:
     external: true
-volumes:
-  postgres_data:

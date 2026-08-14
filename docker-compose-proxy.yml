@@ -1,0 +1,26 @@
+services:
+  traefik:
+    image: traefik:v3.6.13
+    container_name: traefik
+    restart: unless-stopped
+
+    command:
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+
+    ports:
+      - "80:80"
+      - "8080:8080"
+
+    volumes:
+      - /var/run/docker.sock.raw:/var/run/docker.sock
+
+    networks:
+      - custom-network
+
+networks:
+  custom-network:
+    external: true
