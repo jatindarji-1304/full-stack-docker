@@ -1,0 +1,43 @@
+# Dependencies
+**/node_modules
+
+# Next.js build output
+apps/frontend/.next
+apps/frontend/.next/cache
+apps/frontend/out
+
+# Backend build output
+apps/backend/dist
+apps/backend/build
+
+# Turbo
+.turbo
+**/.turbo
+
+# Env files (don't bake secrets into images)
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+
+# Editor/OS junk
+.vscode
+.idea
+.DS_Store
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Docker itself
+Dockerfile*
+.dockerignore
+
+# Misc
+README.md
+*.md
+!apps/**/*.md
+coverage
+.next
