@@ -6,7 +6,7 @@ on:
     branches: [main]
 jobs:
   ci-pipeline:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: checkout code
@@ -23,3 +23,35 @@ jobs:
         run: pnpm lint
       - name: build
         run: pnpm build
+
+  preview:
+    if: github.event_name == 'pull_request'
+    needs: ci-pipeline
+    runs-on: self-hosted
+    env:
+      PORT: ${{secrets.PORT}}
+      POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+      POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+      POSTGRES_DB: ${{secrets.POSTGRES_DB}}
+      DB_HOST: ${{secrets.DB_HOST}}
+      DB_PORT: ${{secrets.DB_PORT}}
+      NEXT_PUBLIC_BASE_URI: ${{secrets.NEXT_PUBLIC_BASE_URI}}
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: set pr number
+        run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+
+      - name: start preview
+        run: |
+          docker compose \
+          -p pr-${PR_NUMBER} \
+          up \
+          --build \
+          -d
+
+      - name: preview url
+        run: |
+          echo "## 🚀 Preview Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🌐 **Preview:** [http://pr-${PR_NUMBER}.localhost](http://pr-${PR_NUMBER}.localhost)" >> $GITHUB_STEP_SUMMARY

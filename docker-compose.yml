@@ -1,40 +1,54 @@
 services:
-
   demo-backend:
-    # build:
-    #   context: .
-    #   dockerfile: apps/backend/Dockerfile
-    image: full-stack-nextjs-demo-backend:latest
-    ports:
-      - "3001:3001"
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    # image: full-stack-nextjs-demo-backend:latest
+    # ports:
+    #   - "3001:3001"
     restart: always
     networks:
       - custom-network
-    env_file:
-      - ./apps/backend/.env
+    # env_file:
+    #   - ./apps/backend/.env
     healthcheck:
       test: ["CMD", "/nodejs/bin/node", "dist/health_check.js"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 15s
+    expose:
+      - 3001
+    environment:
+      - PORT=${PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
 
   demo-frontend:
-    image: full-stack-nextjs-demo-frontend:latest
-    # build:
-    #   context: .
-    #   dockerfile: apps/frontend/Dockerfile
+    # image: full-stack-nextjs-demo-frontend:latest
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    expose:
+      - 3000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pr-1.rule=Host(`pr-1.localhost`)"
-      - "traefik.http.routers.pr-1.entrypoints=web"
-      - "traefik.http.services.pr-1.loadbalancer.server.port=3000"
-    ports:
-      - "3000:3000"
+      - "traefik.docker.network=custom-network"
+
+      - "traefik.http.routers.pr-${PR_NUMBER}.rule=Host(`pr-${PR_NUMBER}.localhost`)"
+      - "traefik.http.routers.pr-${PR_NUMBER}.entrypoints=web"
+      - "traefik.http.services.pr-${PR_NUMBER}.loadbalancer.server.port=3000"
+    # ports:
+    #   - "3000:3000"
     networks:
       - custom-network
-    env_file:
-      - ./apps/frontend/.env
+    # env_file:
+    #   - ./apps/frontend/.env
+    environment:
+      - NEXT_PUBLIC_BASE_URI=${NEXT_PUBLIC_BASE_URI}
     depends_on:
       demo-backend:
         condition: service_healthy
