@@ -44,6 +44,7 @@ jobs:
           docker build \
             -f apps/frontend/Dockerfile \
             -t full-stack-nextjs-demo-frontend:latest \
+            .
       - name: start preview
         run: |
           docker compose \
