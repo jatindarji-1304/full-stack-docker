@@ -45,6 +45,18 @@ jobs:
         run: |
           docker network inspect custom-network >/dev/null 2>&1 || \
           docker network create custom-network
+      - name: start database
+        run: |
+          docker compose \
+          -f docker-compose-db.yml \
+          up -d
+          
+      - name: start traefik
+        run: |
+          docker compose \
+          -f docker-compose-proxy.yml \
+          up -d
+
       - name: start preview
         run: |
           docker compose \
@@ -52,6 +64,7 @@ jobs:
           up \
           --build \
           -d
+
       - name: preview url
         run: |
           echo "## 🚀 Preview Deployment" >> $GITHUB_STEP_SUMMARY
