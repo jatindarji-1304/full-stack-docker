@@ -28,5 +28,4 @@ networks:
     external: true
 volumes:
   postgres_data:
-    external: true
     name: full-stack-nextjs_postgres_data
