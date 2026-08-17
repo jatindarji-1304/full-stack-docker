@@ -23,3 +23,35 @@ jobs:
         run: pnpm lint
       - name: build
         run: pnpm build
+
+  preview:
+    if: github.event_name == 'pull_request'
+    needs: ci-pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: set pr number
+        run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+      - name: build backend docker image
+        run: |
+          docker build \
+            -f apps/backend/Dockerfile \
+            -t full-stack-nextjs-demo-backend:latest \
+            .
+      - name: build frontend docker image
+        run: |
+          docker build \
+            -f apps/frontend/Dockerfile \
+            -t full-stack-nextjs-demo-frontend:latest \
+      - name: start preview
+        run: |
+          docker compose \
+            -p pr-${PR_NUMBER} \
+            up -d
+      - name: preview url
+        run: |
+          echo "## 🚀 Preview Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Preview URL: http://pr-${PR_NUMBER}.localhost" >> $GITHUB_STEP_SUMMARY
+
