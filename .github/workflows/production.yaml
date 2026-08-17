@@ -4,8 +4,10 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+    types: [opened, synchronize, reopened, closed]
 jobs:
   ci-pipeline:
+    if: github.event_name == 'push' || github.event.action != 'closed'
     runs-on: self-hosted
 
     steps:
@@ -25,7 +27,7 @@ jobs:
         run: pnpm build
 
   preview:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
     needs: ci-pipeline
     runs-on: self-hosted
 
@@ -59,7 +61,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "🌐 **Preview:** [http://pr-${PR_NUMBER}.localhost](http://pr-${PR_NUMBER}.localhost)" >> $GITHUB_STEP_SUMMARY
   cleanup:
-    if: github.event.action == 'closed'
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: self-hosted
 
     steps:
