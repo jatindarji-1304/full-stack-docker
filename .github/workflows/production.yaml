@@ -54,4 +54,4 @@ jobs:
         run: |
           echo "## 🚀 Preview Deployment" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Preview URL: http://pr-${PR_NUMBER}.localhost" >> $GITHUB_STEP_SUMMARY
+          echo "🌐 **Preview:** [http://pr-${PR_NUMBER}.localhost](http://pr-${PR_NUMBER}.localhost)" >> $GITHUB_STEP_SUMMARY
