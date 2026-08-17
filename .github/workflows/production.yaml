@@ -50,7 +50,9 @@ jobs:
           up \
           --build \
           -d
-
+      - name: debug
+        run: echo "PR_NUMBER is: '${PR_NUMBER}'"
+        
       - name: preview url
         run: |
           echo "## 🚀 Preview Deployment" >> $GITHUB_STEP_SUMMARY
