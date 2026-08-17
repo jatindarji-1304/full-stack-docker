@@ -48,9 +48,9 @@ jobs:
       - name: start database
         run: |
           docker compose \
-          -f docker-compose-db.yml \
+          -f docker-compose-infrastructure.yml \
           up -d
-          
+
       - name: start traefik
         run: |
           docker compose \
