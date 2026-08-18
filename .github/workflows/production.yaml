@@ -38,28 +38,18 @@ jobs:
         run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
 
       - name: start preview
-        env:
-          PORT: ${{secrets.PORT}}
-          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
-          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-          POSTGRES_DB: ${{secrets.POSTGRES_DB}}
-          DB_HOST: ${{secrets.DB_HOST}}
-          DB_PORT: ${{secrets.DB_PORT}}
-          NEXT_PUBLIC_BASE_URI: ${{secrets.NEXT_PUBLIC_BASE_URI}}
         run: |
           docker compose \
           -p pr-${PR_NUMBER} \
           up \
           --build \
           -d
-      - name: debug
-        run: echo "PR_NUMBER is:'${PR_NUMBER}'"
 
       - name: preview url
         run: |
-          echo "## 🚀 Preview Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "## Preview Deployment" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🌐 **Preview:** [http://pr-${PR_NUMBER}.localhost](http://pr-${PR_NUMBER}.localhost)" >> $GITHUB_STEP_SUMMARY
+          echo "**Preview:** [http://pr-${PR_NUMBER}.localhost](http://pr-${PR_NUMBER}.localhost)" >> $GITHUB_STEP_SUMMARY
 
   cleanup:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
