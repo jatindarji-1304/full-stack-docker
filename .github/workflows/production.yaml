@@ -60,18 +60,36 @@ jobs:
           echo "## 🚀 Preview Deployment" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "🌐 **Preview:** [http://pr-${PR_NUMBER}.localhost](http://pr-${PR_NUMBER}.localhost)" >> $GITHUB_STEP_SUMMARY
+
   cleanup:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: self-hosted
 
     steps:
-      - name: checkout code 
+      - name: checkout code
         uses: actions/checkout@v4
 
       - name: set pr number
         run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> "$GITHUB_ENV"
-      
+
       - name: Remove preview
         run: |
-          docker compose -p pr-${PR_NUMBER} down 
+          docker compose -p pr-${PR_NUMBER} down
+
+  notify-slack:
+    needs:
+      - ci-pipeline
+      - preview
+      - cleanup
+    if: ${{always() && (needs.cleanup.result == 'failure' || needs.preview.result == 'failure' || needs.ci-pipeline.result == 'failure')}}
+    runs-on: self-hosted
+    steps:
+      - name: send slack notification
+        run: |
+          curl -X POST \
+          -H 'Content-type: application/json' \
+          --data '{
+            "text": "ci/cd pipeline failed \nrepository:${{github.repository}} \nbranch:${{github.ref_name}} \nworkflow:${{github.workflow}} \nrun:${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}"
+          }'\
+          "${{secrets.SLACK_WEBHOOK_URL}}"
 
