@@ -80,6 +80,6 @@ jobs:
           -H 'Content-type: application/json' \
           --data '{
             "text": "ci/cd pipeline failed \nrepository:${{github.repository}} \nbranch:${{github.ref_name}} \nworkflow:${{github.workflow}} \nrun:${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}"
-          }'\
+          }' \
           "${{secrets.SLACK_WEBHOOK_URL}}"
 
