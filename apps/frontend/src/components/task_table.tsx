@@ -77,6 +77,7 @@ export default function TaskTable({
             </Button>
             <Button
               variant="outline"
+              className={`bg-amber-400`}
               onClick={async () => {
                 const res = await delete_task({
                   id: row.original.id,
