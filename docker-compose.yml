@@ -12,7 +12,7 @@ services:
     # env_file:
     #   - ./apps/backend/.env
     healthcheck:
-      test: ["CMD", "/nodejs/bin/node", "dist/health_check.js"]
+      test: ["CMD", "/nodejs/bin/node", "dist/src/health_check.js"]
       interval: 10s
       timeout: 5s
       retries: 5

@@ -57,7 +57,7 @@ type TaskFormProps = {
   ) => void | Promise<void>;
 };
 
-function TaskForm({
+export default function TaskForm({
   action,
   buttonText,
   task,

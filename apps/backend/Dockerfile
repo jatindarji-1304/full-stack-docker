@@ -15,9 +15,10 @@ COPY . .
 RUN npx turbo build --filter=backend
 RUN pnpm --filter backend deploy --prod /prod/backend
 
+
 FROM gcr.io/distroless/nodejs24-debian13 AS runner
 WORKDIR /app
 COPY --from=builder /prod/backend ./
 
 EXPOSE 3001
-CMD ["dist/server.js"]
+CMD ["dist/src/server.js"]
