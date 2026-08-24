@@ -8,7 +8,8 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test":"jest"
   },
   "keywords": [],
   "author": "",
@@ -20,12 +21,18 @@
     "pg": "^8.23.0"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@swc/core": "^1.16.1",
+    "@swc/jest": "^0.2.39",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
     "@types/node": "^26.2.0",
     "@types/pg": "^8.21.0",
+    "@types/supertest": "^7.2.1",
+    "jest": "^30.4.2",
+    "supertest": "^7.2.2",
     "tsx": "^4.23.12",
-    "typescript": "^7.0.2",
-    "@repo/eslint-config": "workspace:*"
+    "typescript": "^7.0.2"
   }
 }

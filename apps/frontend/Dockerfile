@@ -14,6 +14,8 @@ FROM deps AS builder
 COPY . .
 RUN npx turbo build --filter=frontend
 
+FROM builder as tester
+RUN pnpm test
 FROM gcr.io/distroless/nodejs24-debian13 AS runner
 WORKDIR /app
 COPY --from=builder /build/apps/frontend/.next/standalone ./
