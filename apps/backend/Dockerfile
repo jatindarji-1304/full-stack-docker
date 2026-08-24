@@ -21,4 +21,4 @@ WORKDIR /app
 COPY --from=builder /prod/backend ./
 
 EXPOSE 3001
-CMD ["dist/server.js"]
+CMD ["dist/src/server.js"]
