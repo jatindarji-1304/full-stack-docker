@@ -15,8 +15,6 @@ COPY . .
 RUN npx turbo build --filter=backend
 RUN pnpm --filter backend deploy --prod /prod/backend
 
-FROM builder as tester 
-RUN pnpm test
 
 FROM gcr.io/distroless/nodejs24-debian13 AS runner
 WORKDIR /app

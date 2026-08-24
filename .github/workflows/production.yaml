@@ -23,6 +23,8 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: lint
         run: pnpm lint
+      - name: test
+        run: pnpm test
       - name: build
         run: pnpm build
 
@@ -90,4 +92,3 @@ jobs:
             "text": "ci/cd pipeline failed \nrepository:${{github.repository}} \nbranch:${{github.ref_name}} \nworkflow:${{github.workflow}} \nrun:${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}"
           }' \
           "${{secrets.SLACK_WEBHOOK_URL}}"
-
