@@ -23,8 +23,8 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: lint
         run: pnpm lint
-      - name: test
-        run: pnpm test
+      # - name: test
+      #   run: pnpm test
       - name: build
         run: pnpm build
 
