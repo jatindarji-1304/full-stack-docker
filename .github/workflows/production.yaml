@@ -75,7 +75,7 @@ jobs:
 
       - name: Remove preview
         run: |
-          docker compose -p pr-${PR_NUMBER} down
+          docker compose -p pr-${PR_NUMBER} down --rmi all
 
   notify-slack:
     needs:
