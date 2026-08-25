@@ -4,14 +4,9 @@ const config: Config = {
   testEnvironment: "node",
 
   transform: {
-    "^.+\\.tsx?$": [
-      "@swc/jest",
-      {},
-    ],
+    "^.+\\.tsx?$": ["@swc/jest", {}],
   },
-
-  extensionsToTreatAsEsm: [".ts"],
-
+  testPathIgnorePatterns: ["/node_modules/", "/dist/"],
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
