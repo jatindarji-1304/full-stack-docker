@@ -29,8 +29,4 @@ app.get("/health", async (_, res) => {
   }
 });
 app.use("/tasks", taskroutes);
-app.get("/feat2", async (_, res) => {
-  return res.json({ data: "hello world" });
-});
 export default app;
-
