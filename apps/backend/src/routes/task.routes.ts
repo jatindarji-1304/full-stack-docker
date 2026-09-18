@@ -6,13 +6,19 @@ import {
   updateTask,
   deleteTask,
 } from "../controller/task.controller.js";
+import {
+  createRequestRateLimit,
+  deleteRequestRateLimit,
+  getRequestRateLimit,
+  updateRequestRateLimit,
+} from "../middleware/rate_limit.middleware.js";
 
 const router = Router();
 
-router.post("/", createTask);
-router.get("/", getTasks);
-router.get("/:id", getTaskById);
-router.put("/:id", updateTask);
-router.delete("/:id", deleteTask);
+router.post("/", createRequestRateLimit, createTask);
+router.get("/", getRequestRateLimit, getTasks);
+router.get("/:id", getRequestRateLimit, getTaskById);
+router.put("/:id", updateRequestRateLimit, updateTask);
+router.delete("/:id", deleteRequestRateLimit, deleteTask);
 
 export default router;
